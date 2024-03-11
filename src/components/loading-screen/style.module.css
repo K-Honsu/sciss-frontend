@@ -1,0 +1,29 @@
+.loading {
+  font-family: Syncopate, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100vw;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.text {
+  display: inline-flex;
+
+  font-weight: 700;
+  font-size: 2rem;
+  color: #eee;
+  letter-spacing: .5rem;
+}
+.scissors2 {
+  opacity: 0;
+  position: absolute;
+  transform: translate(-50%, 40%);
+  rotate: 90deg;
+}
+.scissors2 > video {
+  width: 100px
+}
