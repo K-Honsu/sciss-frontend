@@ -52,7 +52,7 @@ function Loading() {
             <motion.div
             key={_}
             style={{
-              backgroundColor: 'tomato',
+              backgroundColor: '#009254',
               borderRadius: 999,
               width: 10,
               height: 10
