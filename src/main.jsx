@@ -10,6 +10,7 @@ import Home from './pages/home/index.jsx';
 import Login from './pages/auth/login/index.jsx';
 import Signup from './pages/auth/signup/index.jsx';
 import Dashboard from './pages/dashboard/index.jsx';
+import Analytics from './components/modals/analytics/index.jsx';
 // Router
 
 
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "/app",
         element: <Dashboard />
+      },
+      {
+        path: "/analytics",
+        element: <Analytics />
       }
     ]
   },
