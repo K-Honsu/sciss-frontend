@@ -1,0 +1,35 @@
+.link__container {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.word {
+    white-space: nowrap;
+    position: relative;
+}
+
+.span {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+    /* color: var(--link-color);
+    font-size: 1rem;
+    font-weight: 400; */
+}
+@media (max-width: 768px) {
+    .span {
+        color: var(--Background);
+        font-size: 1rem;
+        font-weight: 500;
+    }
+}
+
+
+.absolute__container {
+    position: absolute;
+    top: 0;
+    height: 0;
+}
