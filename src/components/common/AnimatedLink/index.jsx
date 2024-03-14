@@ -57,7 +57,7 @@ const AnimatedLink = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   return isLink ? (
-    <Link
+    <a
       href={href}
       className={styles.link__container}
       onMouseEnter={() => setIsHovered(true)}
@@ -75,7 +75,7 @@ const AnimatedLink = ({
           isHovered={isHovered}
         />
       </span>
-    </Link>
+    </a>
   ) : (
     <p
       className={styles.link__container}

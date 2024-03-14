@@ -2,7 +2,7 @@ import InputBox from "../../../components/common/InputBox";
 import DropdownMenu from "../../../components/common/DropdownMenu";
 function AuthHeader() {
   return (
-    <header className="flex items-center justify-between px-8 py-4">
+    <header className="flex items-center justify-between px-8 py-4 border-b-2">
       <div>
         <img
           width={140}

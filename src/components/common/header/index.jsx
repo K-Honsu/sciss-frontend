@@ -9,17 +9,15 @@ function Header() {
           alt="logo"
           src="/images/logo.svg"
           priority
-          quality={100}
-          unoptimized
         />
       </div>
       <div className="flex gap-x-8">
-        <Link href="login">
+        <Link to="login">
             <button className='btn-secondary'>
               Login
             </button>
           </Link>
-          <Link href="signup">
+          <Link to="signup">
             <button className="btn-primary">Sign up</button>
           </Link>
       </div>
