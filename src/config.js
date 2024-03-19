@@ -1,0 +1,1 @@
+export const baseUrl = "https://scissors-kl37.onrender.com"

@@ -1,8 +1,13 @@
 import AnimatedLink from '../../../components/common/AnimatedLink';
 import StaggeredText from '../../../components/common/StaggeredText';
+import { CreateLink } from '../../../hooks/useCreateLink';
 import { motion } from 'framer-motion'
+import { useState } from 'react';
 import styles from "./style.module.css"
 function HeroSection() {
+  const [url, setUrl] = useState("");
+  const [description, setDescription] = useState("");
+  const [alias, setAlias] = useState("");
   return (
     <section className='px-16 py-8 flex justify-between gap-8 relative'>
       <div className='basis-full'>
