@@ -1,0 +1,22 @@
+.pagination {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: auto;
+}
+.pagination > li.previous {
+  margin-right: auto
+}
+.pagination > li.next {
+  margin-left: auto
+}
+.pagination > li:not(.previous):not(.next) > a {
+  padding: 0.25rem 0.5rem;
+  background-color: #D6D3D1;
+  border-radius: 5px;
+}
+.pagination > li.selected:not(.previous):not(.next) > a {
+  background-color: #64BD87;
+  color: white;
+}

@@ -5,7 +5,9 @@ import { useAuthenticatedLinks } from "../../hooks/useGetLinks";
 import { CreateLink } from "../../hooks/useCreateLink";
 import AuthHeader from "./header";
 import { useState, useEffect } from "react";
-
+import { toast } from 'react-toastify';
+import ReactPaginate from 'react-paginate';
+import styles from "./styles/styles.module.css"
 function Dashboard() {
   const accessToken = usebackendStore((state) => state.accessToken);
   const [url, setUrl] = useState("");
@@ -28,6 +30,14 @@ function Dashboard() {
   const handleCreateLink = () => {
     createLink(url, description, alias);
   };
+
+  const copyToClip = (text) => {
+    // Copy the text inside the text field
+   navigator.clipboard.writeText(text);
+ 
+   // Alert the copied text
+   toast("Copied to clipboard", {position: "top-center", type: "success", autoClose: 3000})
+ }
 
   useEffect(() => {
     const searchInput = document.getElementById(".searchInput");
@@ -127,12 +137,26 @@ function Dashboard() {
             </div>
           </div>
         </aside>
-        <div className="-order-1 col-span-2 py-8 px-8 overflow-x-hidden">
+        <div className="flex flex-col -order-1 col-span-2 py-8 px-8 overflow-x-hidden">
           <h1 className="text-dark-600 text-4xl font-bold mb-8">
             Active Links
           </h1>
-          <div className="flex-col flex gap-4" id="link-post">
-            {links.map((link) => (
+          <div className="flex-col flex-1 flex gap-4" id="link-post">
+            <PaginatedItems items={[...links, ...links]} itemsPerPage={5} />
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default Dashboard;
+
+function Links({ currentItems }) {
+  return (
+    <>
+      {currentItems &&
+        currentItems.map((link) => (
               <div
                 key={link.id}
                 className="p-4 border-2 flex justify-between rounded-lg hover:bg-neutral-100 transition-colors"
@@ -155,12 +179,52 @@ function Dashboard() {
                   <button className="btn-sm-2">Configure</button>
                 </span>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
+            ))
+      }
     </>
   );
 }
 
-export default Dashboard;
+function PaginatedItems({ items, itemsPerPage }) {
+  // Here we use item offsets; we could also use page offsets
+  // following the API or data you're working with.
+  const [itemOffset, setItemOffset] = useState(0);
+
+  // Simulate fetching items from another resources.
+  // (This could be items from props; or items loaded in a local state
+  // from an API endpoint with useEffect and useState)
+  const endOffset = itemOffset + itemsPerPage;
+  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+  const currentItems = items.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(items.length / itemsPerPage);
+
+  // Invoke when user click to request another page.
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % items.length;
+    console.log(
+      `User requested page number ${event.selected}, which is offset ${newOffset}`
+    );
+    setItemOffset(newOffset);
+  };
+
+  return (
+    <>
+      <Links currentItems={currentItems} />
+      <ReactPaginate
+        breakLabel="..."
+        nextLabel="next >"
+        onPageChange={handlePageClick}
+        pageRangeDisplayed={5}
+        pageCount={pageCount}
+        previousLabel="< previous"
+        renderOnZeroPageCount={null}
+        className={styles.pagination}
+        previousClassName={styles.previous}
+        nextClassName={styles.next}
+        disabledClassName={styles.disabled}
+        activeClassName={styles.selected}
+      />
+    </>
+  );
+}
+

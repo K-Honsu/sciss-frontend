@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {createRoot} from "react-dom/client"
 import {
   BrowserRouter as Router,
   Routes,
@@ -21,7 +22,7 @@ function Main() {
   const tempAccessToken = usebackendStore((state) => state.tempAccessToken);
 
   return (
-    <div className="app">
+    <div className="app flex flex-col h-screen overflow-y-hidden">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -33,7 +34,7 @@ function Main() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Router>
       <Main />
