@@ -16,6 +16,7 @@ import Login from "./pages/auth/login/index.jsx";
 import Signup from "./pages/auth/signup/index.jsx";
 import Dashboard from "./pages/dashboard/index.jsx";
 import Analytics from "./components/modals/analytics/index.jsx";
+import AI from "./pages/ai/index.jsx";
 
 function Main() {
   const accessToken = usebackendStore((state) => state.accessToken);
@@ -29,6 +30,8 @@ function Main() {
         <Route path="/app" element={accessToken ? <Dashboard /> : <Login />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/ai" element={<AI />} />
+        
       </Routes>
     </div>
   );
