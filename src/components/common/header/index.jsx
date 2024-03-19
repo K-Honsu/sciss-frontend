@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+
 function Header() {
   return (
     <header className="flex items-center justify-between px-8 py-4">
@@ -13,13 +14,13 @@ function Header() {
       </div>
       <div className="flex gap-x-8">
         <Link to="login">
-            <button className='btn-secondary'>
-              Login
-            </button>
-          </Link>
-          <Link to="signup">
-            <button className="btn-primary">Sign up</button>
-          </Link>
+          <button className='btn-secondary'>
+            Login
+          </button>
+        </Link>
+        <Link to="signup">
+          <button className="btn-primary">Sign up</button>
+        </Link>
       </div>
     </header>
   );
