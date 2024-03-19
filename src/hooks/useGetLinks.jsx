@@ -12,7 +12,7 @@ export const useAuthenticatedLinks = (authToken) => {
       try {
         const options = {
           method: "GET",
-          url: `${baseUrl}/link`,
+          url: `${baseUrl}/link/links`,
           headers: {
             Authorization: `Bearer ${authToken}`,
           },

@@ -19,7 +19,7 @@ export const CreateLink = () => {
       setLoading(true);
       const options = {
         method: "POST",
-        url: `${baseUrl}/link`,
+        url: `${baseUrl}/link/create`,
         headers: {
           "Content-Type": "application/json",
           "User-Agent": "insomnia/8.1.0",
