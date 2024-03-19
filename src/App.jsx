@@ -1,15 +1,20 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+import { ToastContainer } from 'react-toastify';
 import './App.css'
+import 'react-toastify/dist/ReactToastify.css';
 
 import { Outlet } from 'react-router-dom'
 
 function App() {
   return (
-    <main className='flex flex-col h-full'>
-      <Outlet />
-    </main>
+    <>
+      <ToastContainer />
+      <main className='flex flex-col h-full'>
+        <Outlet />
+      </main>
+    </>
   )
 }
 
