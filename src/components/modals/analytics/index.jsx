@@ -1,54 +1,73 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import Chart from "chart.js/auto";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { usebackendStore } from "../../../store/store";
+import { baseUrl } from "../../../config";
 
-function Analytics({ops}) {
-  return (
-    <>
-      <ChartF />
-    </>
-  );
-}
-function ChartF() {
-  const ref = useRef()
+function Analytics() {
+  const [chartData, setChartData] = useState(null);
+  const accessToken = usebackendStore((store) => store.accessToken);
+  const ref = useRef();
+  const { id } = useParams();
+
   useEffect(() => {
-    const ctx = ref.current
-    const getLabels = () => {
-      currDay = Date.now()
-      //for (i = 0;)
-    }
-    const data =  {
-      labels: ['Monday', 'Tue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        borderWidth: 1,
-        borderColor: '#009254',
-      }]
-    }
-    const config = {
-      type: 'line',
-      data: data,
-    };
-    const chartInstance = new Chart(ctx, {
-      ...config,
-      options: {
-        animation: {
-          duration: 2000,
-        },
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${baseUrl}/link/status/${id}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        const data = response.data;
+        const totalCount = data.totalCount;
+        const labels = data.hits.map((hit) => hit.createdAt);
+        const chartData = {
+          labels: labels,
+          datasets: [
+            {
+              label: "Hits",
+              data: Array(labels.length).fill(totalCount),
+              borderWidth: 1,
+              borderColor: "#009254",
+            },
+          ],
+        };
+        setChartData(chartData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
-    });
-    console.log(chartInstance)
-    return () => {
-      chartInstance.destroy()
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (chartData) {
+      const ctx = ref.current;
+      const config = {
+        type: "line",
+        data: chartData,
+        options: {
+          animation: {
+            duration: 2000,
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      };
+      const chartInstance = new Chart(ctx, config);
+
+      return () => {
+        chartInstance.destroy();
+      };
     }
-  }, [])
-  return (
-    <canvas ref={ref}></canvas>
-  );
+  }, [chartData]);
+
+  return <canvas ref={ref}></canvas>;
 }
 
 export default Analytics;

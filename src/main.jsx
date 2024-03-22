@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {createRoot} from "react-dom/client"
+import { createRoot } from "react-dom/client";
 import {
   BrowserRouter as Router,
   Routes,
@@ -28,10 +28,9 @@ function Main() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/app" element={accessToken ? <Dashboard /> : <Login />} />
-        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/analytics/:id" element={<Analytics />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/ai" element={<AI />} />
-        
       </Routes>
     </div>
   );
