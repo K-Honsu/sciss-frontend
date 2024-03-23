@@ -3,24 +3,33 @@ import InputBox from "../../components/common/InputBox";
 import DropdownMenu from "../../components/common/DropdownMenu";
 import { useAuthenticatedLinks } from "../../hooks/useGetLinks";
 import { CreateLink } from "../../hooks/useCreateLink";
+import { useNavigate } from "react-router-dom";
 import AuthHeader from "./header";
 import { useState, useEffect } from "react";
-import { toast } from 'react-toastify';
-import ReactPaginate from 'react-paginate';
-import styles from "./styles/styles.module.css"
+import { toast } from "react-toastify";
+import ReactPaginate from "react-paginate";
+import styles from "./styles/styles.module.css";
 function Dashboard() {
   const accessToken = usebackendStore((state) => state.accessToken);
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [alias, setAlias] = useState("");
   const { createLink } = CreateLink();
-  const { links, loading, error } = useAuthenticatedLinks(accessToken);
+  const { links, loading, error } = useAuthenticatedLinks(
+    accessToken,
+    searchQuery
+  );
   const handleUrlChange = (e) => {
     setUrl(e.target.value);
   };
 
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
+  };
+
+  const handleSearchInputChange = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   const handleAliasChange = (e) => {
@@ -33,52 +42,15 @@ function Dashboard() {
 
   const copyToClip = (text) => {
     // Copy the text inside the text field
-   navigator.clipboard.writeText(text);
- 
-   // Alert the copied text
-   toast("Copied to clipboard", {position: "top-center", type: "success", autoClose: 3000})
- }
+    navigator.clipboard.writeText(text);
 
-  useEffect(() => {
-    const searchInput = document.getElementById(".searchInput");
-    const linkPosts = document.querySelectorAll(".link-post");
-
-    const handleSearchInput = () => {
-      const searchValue = searchInput.value;
-      console.log({ search: searchValue });
-
-      linkPosts.forEach((linkPost) => {
-        const linkDescription = linkPost
-          .querySelector(".link-description")
-          .textContent.toLowerCase();
-        const linkUrl = linkPost
-          .querySelector(".link-url")
-          .textContent.toLowerCase();
-        const linkAlias = linkPost
-          .querySelector(".link-alias")
-          .textContent.toLowerCase();
-
-        if (
-          linkDescription.includes(searchValue) ||
-          linkUrl.includes(searchValue) ||
-          linkAlias.includes(searchValue)
-        ) {
-          linkPost.style.display = "block";
-        } else {
-          linkPost.style.display = "none";
-        }
-      });
-    };
-
-    if (searchInput) {
-      // Ensure searchInput is not null before adding event listener
-      searchInput.addEventListener("input", handleSearchInput);
-
-      return () => {
-        searchInput.removeEventListener("input", handleSearchInput);
-      };
-    }
-  }, [links]);
+    // Alert the copied text
+    toast("Copied to clipboard", {
+      position: "top-center",
+      type: "success",
+      autoClose: 3000,
+    });
+  };
   return (
     <>
       {/* <AuthHeader /> */}
@@ -86,9 +58,7 @@ function Dashboard() {
         <div>
           <img width={140} height={61.5} alt="logo" src="/images/logo.svg" />
         </div>
-        <div id="searchInput">
-          <InputBox placeholder="search" />
-        </div>
+        <InputBox placeholder="search" onChange={handleSearchInputChange} />
         <DropdownMenu />
       </header>
       <div className="overflow-hidden h-full flex-1 grid grid-cols-3 [&>*]:border-primary-100 [&>*]:border-2 [&>*]:-m-[1px] -mt-[2px]">
@@ -153,34 +123,51 @@ function Dashboard() {
 export default Dashboard;
 
 function Links({ currentItems }) {
+  const navigate = useNavigate();
+
+  const handleClick = (id) => {
+    navigate(`/analytics/${id}`);
+  };
   return (
     <>
       {currentItems &&
         currentItems.map((link) => (
-              <div
-                key={link.id}
-                className="p-4 border-2 flex justify-between rounded-lg hover:bg-neutral-100 transition-colors"
-                id="link-post"
+          <div
+            key={link.id}
+            className="p-4 border-2 flex justify-between rounded-lg hover:bg-neutral-100 transition-colors"
+            id="link-post"
+          >
+            <span className="px-2 flex flex-col justify-between">
+              <h2 className="py-2 text-dark-500 text-3xl font-semibold">
+                {link.description}
+              </h2>
+              <span>
+                <p className="text-neutral-500 text-sm">{link.url}</p>
+                <a href={link.alias} target="_blank" rel="noopener noreferrer">
+                  <p className="text-neutral-500 text-sm">{link.alias}</p>
+                </a>
+
+                <p className="text-neutral-500 text-sm">
+                  Created {link.created_at}
+                </p>
+              </span>
+            </span>
+            <span className="flex flex-col gap-y-4">
+              {/* <button className="btn-sm">View analytics</button> */}
+              {/* <button
+                className="btn-sm"
+                onClick={() => navigate(`/chart/${link._id}`)}
               >
-                <span className="px-2 flex flex-col justify-between">
-                  <h2 className="py-2 text-dark-500 text-3xl font-semibold">
-                    {link.description}
-                  </h2>
-                  <span>
-                    <p className="text-neutral-500 text-sm">{link.url}</p>
-                    <p className="text-neutral-500 text-sm">{link.alias}</p>
-                    <p className="text-neutral-500 text-sm">
-                      Created {link.created_at}
-                    </p>
-                  </span>
-                </span>
-                <span className="flex flex-col gap-y-4">
-                  <button className="btn-sm">View analytics</button>
-                  <button className="btn-sm-2">Configure</button>
-                </span>
-              </div>
-            ))
-      }
+                View analytics
+              </button> */}
+              <button className="btn-sm" onClick={() => handleClick(link.id)}>
+                View analytics
+              </button>
+
+              <button className="btn-sm-2">Configure</button>
+            </span>
+          </div>
+        ))}
     </>
   );
 }
@@ -227,4 +214,3 @@ function PaginatedItems({ items, itemsPerPage }) {
     </>
   );
 }
-
