@@ -1,33 +1,31 @@
 import { useState } from "react";
 import axios from "axios";
+import { usebackendStore } from "../store/store";
 import { baseUrl } from "../config";
 import { toast } from "react-toastify";
 
-export const CreateLink = () => {
+export const GenerateQRCode = () => {
+  const accessToken = usebackendStore((state) => state.accessToken);
+  const [data, setData] = useState("")
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [data, setData] = useState("");
 
-  const AnonCreateLink = async (url, alias) => {
+  const generateQrCode = async (alias) => {
     try {
-      const postData = {
-        url,
-        ...(alias && { alias }),
-      };
       setLoading(true);
       const options = {
         method: "POST",
-        url: `${baseUrl}/link/anons/create`,
+        url: `${baseUrl}/link/${alias}`,
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
-        data: postData,
       };
       const response = await axios.request(options);
-      if (response.status === 201) {
-        console.log(response.data.data.linkUrl)
-        toast.success("Link created and shorted successfully");
-        setData(response.data.data.linkUrl);
+      console.log({ response: response });
+      if (response.status === 200) {
+        setData(response.data.data)
+        toast.success("Generated QR Code Successfully!");
       }
       setLoading(false);
     } catch (error) {
@@ -35,5 +33,5 @@ export const CreateLink = () => {
       setLoading(false);
     }
   };
-  return { loading, error, AnonCreateLink, data };
+  return { data, loading, error, generateQrCode };
 };

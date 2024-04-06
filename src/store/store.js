@@ -13,7 +13,6 @@ const usebackendStore = create(
         userName: "",
         tempUserId: null,
       },
-      ChallengeId: null,
       setActiveTab: (tab) =>
         set(() => ({
           activeTab: tab,
@@ -23,7 +22,7 @@ const usebackendStore = create(
           user: { ...state.user, userId: id },
           accessToken: token,
         })),
-    
+
       setEmail: (email) =>
         set((state) => ({ user: { ...state.user, email: email } })),
       setUserName: (username) =>
@@ -35,8 +34,17 @@ const usebackendStore = create(
           user: { ...state.user, tempUserId: id },
           tempAccessToken: token,
         })),
+      resetAuth: () =>
+        set({
+          user: {
+            userId: null,
+            email: "",
+            accessToken: null,
+            userName: "",
+          },
+          accessToken: null,
+        }),
       setModal: (payload) => set({ modal: payload }),
-      setChallengeId: (id) => set({ ChallengeId: id }),
       setCompareStatus: (payload) =>
         set({ compareStatus: [...this.state.compareStatus, payload] }),
     }),
@@ -48,3 +56,45 @@ const usebackendStore = create(
 );
 
 export { usebackendStore };
+
+// const useTempAuthStore = create((set) => ({
+//   tempAccessToken: null,
+//   tempUserId: null,
+//   setTempAuth: (id, token) =>
+//     set(() => ({
+//       tempUserId: id,
+//       tempAccessToken: token,
+//     })),
+//   resetTempAuth: () => {
+//     set({
+//       tempUserId: null,
+//       tempAccessToken: null,
+//       accessToken: null,
+//       user: null,
+//     });
+//   },
+// }));
+const useTempAuthStore = create(
+  persist(
+    (set) => ({
+      tempAccessToken: null,
+      tempUserId: null,
+      setTempAuth: (id, token) =>
+        set(() => ({
+          tempUserId: id,
+          tempAccessToken: token
+        })),
+      resetTempAuth: () => {
+        set({
+          tempUserId: null,
+          tempAccessToken: null,
+        });
+      },
+    }),
+    {
+      name: "useTempAuthStore",
+    }
+  )
+);
+
+export { useTempAuthStore };

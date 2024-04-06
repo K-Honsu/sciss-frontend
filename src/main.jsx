@@ -5,6 +5,7 @@ import {
   Routes,
   Route,
   Navigate,
+  useNavigate,
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { usebackendStore } from "./store/store.js";
@@ -20,14 +21,17 @@ import AI from "./pages/ai/index.jsx";
 
 function Main() {
   const accessToken = usebackendStore((state) => state.accessToken);
-  const tempAccessToken = usebackendStore((state) => state.tempAccessToken);
+  const navigate = useNavigate();
 
   return (
     <div className="app flex flex-col h-screen overflow-y-hidden">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/app" element={accessToken ? <Dashboard /> : <Login />} />
+        <Route
+          path="/app"
+          element={accessToken ? <Dashboard /> : navigate("/login")}
+        />
         <Route path="/analytics/:id" element={<Analytics />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/ai" element={<AI />} />

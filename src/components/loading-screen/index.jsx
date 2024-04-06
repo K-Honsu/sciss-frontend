@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import styles from "./style.module.css"
 function Loading() {
   const long = "www.welcometomysite.com"
-  const link = "bit.ly"
+  const link = "clutter.ly"
   const [current, setCurrent] = useState("long")
   const [left, setLeft] = useState(long)
   const right = "/user"

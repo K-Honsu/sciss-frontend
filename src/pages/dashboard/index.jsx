@@ -4,11 +4,11 @@ import DropdownMenu from "../../components/common/DropdownMenu";
 import { useAuthenticatedLinks } from "../../hooks/useGetLinks";
 import { CreateLink } from "../../hooks/useCreateLink";
 import { useNavigate } from "react-router-dom";
-import AuthHeader from "./header";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import ReactPaginate from "react-paginate";
 import styles from "./styles/styles.module.css";
+import Modal from "../../components/modals/qrCode";
 function Dashboard() {
   const accessToken = usebackendStore((state) => state.accessToken);
   const [url, setUrl] = useState("");
@@ -123,11 +123,19 @@ function Dashboard() {
 export default Dashboard;
 
 function Links({ currentItems }) {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedAlias, setSelectedAlias] = useState("");
   const navigate = useNavigate();
 
   const handleClick = (id) => {
     navigate(`/analytics/${id}`);
   };
+
+  const handleQRCodeClick = (alias) => {
+    setSelectedAlias(alias);
+    setShowModal(true);
+  };
+
   return (
     <>
       {currentItems &&
@@ -139,12 +147,15 @@ function Links({ currentItems }) {
           >
             <span className="px-2 flex flex-col justify-between">
               <h2 className="py-2 text-dark-500 text-3xl font-semibold">
+                {/* {link.alias.split("/").pop()} */}
                 {link.description}
               </h2>
               <span>
                 <p className="text-neutral-500 text-sm">{link.url}</p>
                 <a href={link.alias} target="_blank" rel="noopener noreferrer">
-                  <p className="text-neutral-500 text-sm">{link.alias}</p>
+                  <p className="text-neutral-500 text-sm">
+                    Shortened Link: <u>{link.alias}</u>
+                  </p>
                 </a>
 
                 <p className="text-neutral-500 text-sm">
@@ -165,6 +176,18 @@ function Links({ currentItems }) {
               </button>
 
               <button className="btn-sm-2">Configure</button>
+              <button
+                className="btn-sm"
+                onClick={() => handleQRCodeClick(link.alias.split("/").pop())}
+              >
+                QR Codes
+              </button>
+              {showModal && (
+                <Modal
+                  onClose={() => setShowModal(false)}
+                  alias={selectedAlias}
+                />
+              )}
             </span>
           </div>
         ))}

@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { baseUrl } from "../config";
+import { usebackendStore } from "../store/store";
 
 export const useAuthenticatedLinks = (authToken, searchQuery) => {
   const [links, setLinks] = useState([]);
+  const accessToken = usebackendStore((state) => state.accessToken);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -14,7 +16,7 @@ export const useAuthenticatedLinks = (authToken, searchQuery) => {
           method: "GET",
           url: `${baseUrl}/link/links`,
           headers: {
-            Authorization: `Bearer ${authToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
           params: {
             descriptionQ: searchQuery,
