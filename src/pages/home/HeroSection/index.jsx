@@ -90,10 +90,15 @@ function HeroSection() {
                 />
               </div>
             </div>
-            <button className="mt-6 text-primary-darker font-medium text-xl rounded-lg py-4 bg-gradient-to-tl from-[#60EFFF] to-[#00FF87] hover:from-[#00FF87] hover:to-[#60EFFF]" onClick={handleCreateLink}>
+            <button
+              className="mt-6 text-primary-darker font-medium text-xl rounded-lg py-4 bg-gradient-to-tl from-[#60EFFF] to-[#00FF87] hover:from-[#00FF87] hover:to-[#60EFFF]"
+              onClick={handleCreateLink}
+            >
               Shorten Link
             </button>
-            {data}
+            <a href={data} target="_blank">
+              Your shortened Link is: <u>{data}</u>
+            </a>
           </div>
         </div>
       </div>

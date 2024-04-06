@@ -24,7 +24,7 @@ function Login() {
 
       const response = await axios.request(options);
       if (response.status === 200) {
-        toast.success("Login in successfully");
+        toast.success("Login successfully");
         login(formBody.email, formBody.password);
         setTimeout(() => {
           window.location.href = "/app";
@@ -69,6 +69,7 @@ function Login() {
                 <InputBox
                   name="password"
                   type="password"
+                  placeholder="Enter your password"
                   value={formBody.password}
                   onChange={(e) =>
                     setFormBody((prev) => ({
