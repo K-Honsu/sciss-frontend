@@ -23,7 +23,6 @@ export const useAuthenticatedLinks = (authToken, searchQuery) => {
           },
         };
         const response = await axios.request(options);
-        console.log(response.data.data);
         setLinks(response.data.data);
         setLoading(false);
       } catch (error) {

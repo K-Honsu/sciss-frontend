@@ -6,8 +6,7 @@ export const useLogout = () => {
   const navigate = useNavigate()
   const resetTempAuth = useTempAuthStore((state) => state.resetTempAuth);
   const logout = async () => {
-    console.log(resetTempAuth())
-    console.log("hello");
+    localStorage.clear()
     resetTempAuth();
     navigate("/login")
   };

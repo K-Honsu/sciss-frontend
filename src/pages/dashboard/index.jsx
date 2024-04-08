@@ -1,7 +1,10 @@
 import { usebackendStore } from "../../store/store";
 import InputBox from "../../components/common/InputBox";
+import React from "react";
 import DropdownMenu from "../../components/common/DropdownMenu";
+import { Pencil, Trash2, Copy } from "lucide-react";
 import { useAuthenticatedLinks } from "../../hooks/useGetLinks";
+import { DeleteLink } from "../../hooks/useDelete";
 import { CreateLink } from "../../hooks/useCreateLink";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -11,6 +14,7 @@ import styles from "./styles/styles.module.css";
 import Modal from "../../components/modals/qrCode";
 function Dashboard() {
   const accessToken = usebackendStore((state) => state.accessToken);
+  const MemoizedPaginatedItems = React.memo(PaginatedItems);
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -40,17 +44,6 @@ function Dashboard() {
     createLink(url, description, alias);
   };
 
-  const copyToClip = (text) => {
-    // Copy the text inside the text field
-    navigator.clipboard.writeText(text);
-
-    // Alert the copied text
-    toast("Copied to clipboard", {
-      position: "top-center",
-      type: "success",
-      autoClose: 3000,
-    });
-  };
   return (
     <>
       {/* <AuthHeader /> */}
@@ -112,7 +105,7 @@ function Dashboard() {
             Active Links
           </h1>
           <div className="flex-col flex-1 flex gap-4" id="link-post">
-            <PaginatedItems items={[...links, ...links]} itemsPerPage={5} />
+            <MemoizedPaginatedItems items={links} itemsPerPage={5} />
           </div>
         </div>
       </div>
@@ -125,10 +118,15 @@ export default Dashboard;
 function Links({ currentItems }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedAlias, setSelectedAlias] = useState("");
+  const { deleteLink } = DeleteLink();
   const navigate = useNavigate();
 
   const handleClick = (id) => {
     navigate(`/analytics/${id}`);
+  };
+
+  const handleDeleteButton = (id) => {
+    deleteLink(id);
   };
 
   const handleQRCodeClick = (alias) => {
@@ -136,9 +134,23 @@ function Links({ currentItems }) {
     setShowModal(true);
   };
 
+  const copyToClip = async (text) => {
+    // Copy the text inside the text field
+    await navigator.clipboard.writeText(text);
+
+    // Alert the copied text
+    toast("Copied to clipboard", {
+      position: "top-center",
+      type: "success",
+      autoClose: 3000,
+    });
+  };
+
   return (
     <>
-      {currentItems &&
+      {currentItems.length === 0 ? (
+        <b>No Link Shortened yet</b>
+      ) : (
         currentItems.map((link) => (
           <div
             key={link.id}
@@ -147,41 +159,51 @@ function Links({ currentItems }) {
           >
             <span className="px-2 flex flex-col justify-between">
               <h2 className="py-2 text-dark-500 text-3xl font-semibold">
-                {/* {link.alias.split("/").pop()} */}
                 {link.description}
               </h2>
               <span>
-                <p className="text-neutral-500 text-sm">{link.url}</p>
-                <a href={link.alias} target="_blank" rel="noopener noreferrer">
-                  <p className="text-neutral-500 text-sm">
-                    Shortened Link: <u>{link.alias}</u>
-                  </p>
-                </a>
-
+                <p className="text-neutral-500 text-sm">
+                  {link.url.length > 40
+                    ? link.url.substring(0, 55) + "..."
+                    : link.url}
+                </p>
+                <div className="flex items-center">
+                  <a
+                    href={link.alias}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <p className="text-neutral-500 text-sm">
+                      Shortened Link: <u>{link.alias}</u>
+                    </p>
+                  </a>
+                  <button onClick={() => copyToClip(link.alias)}>
+                    <Copy size={15} className="ml-2" />
+                  </button>
+                </div>
                 <p className="text-neutral-500 text-sm">
                   Created {link.created_at}
                 </p>
               </span>
             </span>
             <span className="flex flex-col gap-y-4">
-              {/* <button className="btn-sm">View analytics</button> */}
-              {/* <button
-                className="btn-sm"
-                onClick={() => navigate(`/chart/${link._id}`)}
-              >
-                View analytics
-              </button> */}
               <button className="btn-sm" onClick={() => handleClick(link.id)}>
                 View analytics
               </button>
-
-              <button className="btn-sm-2">Configure</button>
               <button
                 className="btn-sm"
                 onClick={() => handleQRCodeClick(link.alias.split("/").pop())}
               >
                 QR Codes
               </button>
+              <div className="flex gap-11">
+                <button onClick={() => handleDeleteButton(link.id)}>
+                  <Trash2 />
+                </button>
+                <button>
+                  <Pencil />
+                </button>
+              </div>
               {showModal && (
                 <Modal
                   onClose={() => setShowModal(false)}
@@ -190,7 +212,8 @@ function Links({ currentItems }) {
               )}
             </span>
           </div>
-        ))}
+        ))
+      )}
     </>
   );
 }
