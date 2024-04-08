@@ -50,7 +50,7 @@ function DropdownMenu() {
             tabIndex="-1"
           >
             <div className="py-1" role="log_out">
-              <button onClick={() => logout()}>Log out</button>
+              <button className="mt-4 w-56 flex items-center justify-center gap-2 px-5 py-3 font-medium rounded-md bg-red-700 text-white" onClick={() => logout()}>Log out</button>
               <a
                 href=""
                 className="text-gray-700 block px-4 py-2 text-sm"

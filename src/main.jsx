@@ -21,6 +21,7 @@ import AI from "./pages/ai/index.jsx";
 
 function Main() {
   const accessToken = usebackendStore((state) => state.accessToken);
+  console.log(accessToken);
   const navigate = useNavigate();
 
   return (
@@ -30,9 +31,22 @@ function Main() {
         <Route path="/login" element={<Login />} />
         <Route
           path="/app"
-          element={accessToken ? <Dashboard /> : navigate("/login")}
+          element={
+            <>
+              {accessToken && <Dashboard />}
+              {!accessToken && <Navigate to={"/login"} />}
+            </>
+          }
         />
-        <Route path="/analytics/:id" element={<Analytics />} />
+        <Route
+          path="/analytics/:id"
+          element={
+            <>
+              {accessToken && <Analytics />}
+              {accessToken && <Navigate to={"/login"} />}
+            </>
+          }
+        />
         <Route path="/signup" element={<Signup />} />
         <Route path="/ai" element={<AI />} />
       </Routes>
