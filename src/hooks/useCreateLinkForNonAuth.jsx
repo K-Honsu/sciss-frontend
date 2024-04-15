@@ -25,7 +25,6 @@ export const CreateLink = () => {
       };
       const response = await axios.request(options);
       if (response.status === 201) {
-        console.log(response.data.data.linkUrl)
         toast.success("Link created and shorted successfully");
         setData(response.data.data.linkUrl);
       }

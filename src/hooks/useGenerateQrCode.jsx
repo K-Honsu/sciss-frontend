@@ -22,7 +22,6 @@ export const GenerateQRCode = () => {
         },
       };
       const response = await axios.request(options);
-      console.log({ response: response });
       if (response.status === 200) {
         setData(response.data.data)
         toast.success("Generated QR Code Successfully!");

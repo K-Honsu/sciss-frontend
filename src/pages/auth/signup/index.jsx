@@ -31,7 +31,6 @@ function Signup() {
       };
 
       const response = await axios.request(options);
-      console.log(response.data);
       if (response.status === 201) {
         toast.success("SignUp successfull, Redirecting to the login page!");
         setTimeout(() => {
