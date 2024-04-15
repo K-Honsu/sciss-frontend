@@ -37,7 +37,6 @@ export const useLogin = () => {
     } catch {
       if (!iscancelled) {
         setError("Unknown Error occured");
-        console.log("Unknown Error occured");
       }
     }
   };

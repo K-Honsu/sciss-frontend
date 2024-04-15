@@ -21,7 +21,6 @@ function Loading() {
               x: ref.current.getBoundingClientRect().left,
               y: ref.current.getBoundingClientRect().top
             }))
-            console.log(ref.current)
           }}
           />
         </div>

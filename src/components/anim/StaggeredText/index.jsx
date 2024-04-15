@@ -8,14 +8,6 @@ const StaggeredText = ({ text, once=false, delay=0, callback=()=> {} }) => {
       y: '-100%',
       opacity: 0
     },
-    // open: (i) => {
-    //   console.log(i)
-    //   return ({
-    //       y: '0%',
-    //       opacity: 1,
-    //       transition: { duration: 0.5, delay: delay + 0.1 * i, ease: [0.33, 1, 0.68, 1] },
-    //     })
-    // }
     open: (i) => ({
       y: '0%',
       opacity: 1,

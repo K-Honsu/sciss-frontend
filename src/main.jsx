@@ -21,8 +21,6 @@ import AI from "./pages/ai/index.jsx";
 
 function Main() {
   const accessToken = usebackendStore((state) => state.accessToken);
-  console.log(accessToken);
-  const navigate = useNavigate();
 
   return (
     <div className="app flex flex-col h-screen overflow-y-hidden">
@@ -43,12 +41,20 @@ function Main() {
           element={
             <>
               {accessToken && <Analytics />}
-              {accessToken && <Navigate to={"/login"} />}
+              {!accessToken && <Navigate to={"/login"} />}
             </>
           }
         />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/ai" element={<AI />} />
+        <Route
+          path="/ai"
+          element={
+            <>
+              {accessToken && <AI />}
+              {!accessToken && <Navigate to={"/login"} />}
+            </>
+          }
+        />
       </Routes>
     </div>
   );

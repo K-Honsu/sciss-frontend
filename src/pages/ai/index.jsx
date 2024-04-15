@@ -8,32 +8,24 @@ import axios from "axios";
 function AI() {
   const [prompt, setPrompt] = useState("");
   const accessToken = usebackendStore((state) => state.accessToken);
-  console.log(accessToken);
   const [outputs, setOutputs] = useState([]);
+  const [generatedText, setGeneratedText] = useState("");
   const send = async (e) => {
     e.preventDefault();
     try {
       const options = {
-        method: "GET",
+        method: "POST",
         url: `${baseUrl}/gemini/chat`,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
-        params: { prompt },
+        data: { prompt },
       };
 
       const response = await axios.request(options);
+      setGeneratedText(response.data.data);
       console.log(response);
-      // const response = await axios.get(`${baseUrl}/gemini/chat`, {
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     Authorization: `Bearer ${accessToken}`,
-      //   },
-      //   data: { prompt },
-      // });
-      // console.log(response);
-      // setOutputs(response);
     } catch (error) {
       console.error(error.response);
     }
@@ -51,14 +43,17 @@ function AI() {
       </header>
       <div className="p-6 flex flex-col flex-1">
         <div className="flex flex-col justify-end flex-1">
-          {outputs}
-          {setOutputs}
-          {/* {outputs &&
-            outputs.map((output) => (
+          {/* {generatedText &&
+            generatedText.map((Gentext) => (
               <div className="p-4">
-                <p>{output.text}</p>
+                <p>{Gentext.text}</p>
               </div>
             ))} */}
+          {generatedText && (
+            <div className="p-4">
+              <p>{generatedText}</p>
+            </div>
+          )}
         </div>
         <div className="flex gap-x-4 gap-y-4">
           <div className="flex flex-1 flex-col gap-2">
